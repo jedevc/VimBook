@@ -42,9 +42,9 @@ function! NotebookClearOutput()
 endfunction
 
 function! NotebookExecuteAll()
-  global/^$ /call NotebookExecute()
+  silent global/^$ /call NotebookExecute()
 endfunction
 
 function! NotebookClearOutputAll()
-  global/^| /normal dd
+  silent global/^| /normal dd
 endfunction
