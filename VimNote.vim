@@ -16,7 +16,7 @@ def VimNoteExecute():
 
     vim.current.buffer.append(lines, line_number + 1)
 
-def VimNoteClearOutput():
+def VimNoteClear():
   buff = vim.current.buffer
   line_number = vim.current.range.start
   start, end = line_number, line_number
@@ -37,14 +37,19 @@ function! VimNoteExecute()
   python3 VimNoteExecute()
 endfunction
 
-function! VimNoteClearOutput()
-  python3 VimNoteClearOutput()
+function! VimNoteClear()
+  python3 VimNoteClear()
 endfunction
 
 function! VimNoteExecuteAll()
   silent global/^$ /call VimNoteExecute()
 endfunction
 
-function! VimNoteClearOutputAll()
+function! VimNoteClearAll()
   silent global/^| /normal dd
 endfunction
+
+command! VimModeExecute call VimNoteExecute()
+command! VimModeExecuteAll call VimNoteExecuteAll()
+command! VimNoteClear call VimNoteClear()
+command! VimNoteClearAll call VimNoteClearAll()
