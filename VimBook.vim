@@ -2,8 +2,8 @@ python3 << endpython
 
 import vim, subprocess
 
-def VimNoteExecute():
-  line_number = VimNoteClearOutput()
+def VimBookExecute():
+  line_number = VimBookClearOutput()
   line = vim.current.buffer[line_number]
 
   if line.startswith('$ '):
@@ -16,7 +16,7 @@ def VimNoteExecute():
 
     vim.current.buffer.append(lines, line_number + 1)
 
-def VimNoteClear():
+def VimBookClear():
   buff = vim.current.buffer
   line_number = vim.current.range.start
   start, end = line_number, line_number
@@ -33,23 +33,23 @@ def VimNoteClear():
 
 endpython
 
-function! VimNoteExecute()
-  python3 VimNoteExecute()
+function! VimBookExecute()
+  python3 VimBookExecute()
 endfunction
 
-function! VimNoteClear()
-  python3 VimNoteClear()
+function! VimBookClear()
+  python3 VimBookClear()
 endfunction
 
-function! VimNoteExecuteAll()
-  silent global/^$ /call VimNoteExecute()
+function! VimBookExecuteAll()
+  silent global/^$ /call VimBookExecute()
 endfunction
 
-function! VimNoteClearAll()
+function! VimBookClearAll()
   silent global/^| /normal dd
 endfunction
 
-command! VimModeExecute call VimNoteExecute()
-command! VimModeExecuteAll call VimNoteExecuteAll()
-command! VimNoteClear call VimNoteClear()
-command! VimNoteClearAll call VimNoteClearAll()
+command! VimBookExecute call VimBookExecute()
+command! VimBookExecuteAll call VimBookExecuteAll()
+command! VimBookClear call VimBookClear()
+command! VimBookClearAll call VimBookClearAll()
