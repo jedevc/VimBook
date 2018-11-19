@@ -3,7 +3,7 @@ python3 << endpython
 import vim, subprocess
 
 def VimBookExecute():
-  line_number = VimBookClearOutput()
+  line_number = VimBookClear()
   line = vim.current.buffer[line_number]
 
   if line.startswith('$ '):
@@ -19,17 +19,28 @@ def VimBookExecute():
 def VimBookClear():
   buff = vim.current.buffer
   line_number = vim.current.range.start
-  start, end = line_number, line_number
+  start, end = find_lines(buff, line_number, '| ', '$ ')
 
-  while start >= 0 and buff[start].startswith('| '):
-    start -= 1
-
-  while end < len(vim.current.buffer) and (buff[end].startswith('| ') or buff[end].startswith('$ ')):
-    end += 1
-
-  del buff[start + 1:end]
+  if start is not None:
+    del buff[start + 1:end + 2]
 
   return start
+
+def find_lines(buff, ln, *matches):
+  start, end = ln, ln
+
+  while start >= 0 and buff[start].startswith(matches):
+    start -= 1
+  while end < len(vim.current.buffer) and buff[end].startswith(matches):
+    end += 1
+
+  start += 1
+  end -= 1
+
+  if start <= end:
+    return start, end
+  else:
+    return None, None
 
 endpython
 
