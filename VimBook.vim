@@ -73,3 +73,9 @@ command! VimBookExecute call VimBookExecute()
 command! VimBookExecuteAll call VimBookExecuteAll()
 command! VimBookClear call VimBookClear()
 command! VimBookClearAll call VimBookClearAll()
+
+nmap ;; :VimBookExecute<CR>
+nmap ;x :VimBookExecute<CR>
+nmap ;X :VimBookExecuteAll<CR>
+nmap ;d :VimBookClear<CR>
+nmap ;D :VimBookClearAll<CR>
