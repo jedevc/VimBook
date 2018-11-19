@@ -2,8 +2,8 @@ python3 << endpython
 
 import vim, subprocess
 
-def NotebookExecute():
-  line_number = NotebookClearOutput()
+def VimNoteExecute():
+  line_number = VimNoteClearOutput()
   line = vim.current.buffer[line_number]
 
   if line.startswith('$ '):
@@ -16,7 +16,7 @@ def NotebookExecute():
 
     vim.current.buffer.append(lines, line_number + 1)
 
-def NotebookClearOutput():
+def VimNoteClearOutput():
   buff = vim.current.buffer
   line_number = vim.current.range.start
   start, end = line_number, line_number
@@ -33,18 +33,18 @@ def NotebookClearOutput():
 
 endpython
 
-function! NotebookExecute()
-  python3 NotebookExecute()
+function! VimNoteExecute()
+  python3 VimNoteExecute()
 endfunction
 
-function! NotebookClearOutput()
-  python3 NotebookClearOutput()
+function! VimNoteClearOutput()
+  python3 VimNoteClearOutput()
 endfunction
 
-function! NotebookExecuteAll()
-  silent global/^$ /call NotebookExecute()
+function! VimNoteExecuteAll()
+  silent global/^$ /call VimNoteExecute()
 endfunction
 
-function! NotebookClearOutputAll()
+function! VimNoteClearOutputAll()
   silent global/^| /normal dd
 endfunction
