@@ -2,8 +2,8 @@ python3 << endpython
 
 import vim, subprocess
 
-def VimBookExecute():
-  line_number = VimBookClear()
+def vim_book_execute():
+  line_number = vim_book_clear()
   line = vim.current.buffer[line_number]
 
   if line.startswith('$ '):
@@ -16,7 +16,7 @@ def VimBookExecute():
 
     vim.current.buffer.append(lines, line_number + 1)
 
-def VimBookClear():
+def vim_book_clear():
   buff = vim.current.buffer
   line_number = vim.current.range.start
   start, end = find_lines(buff, line_number, '| ', '$ ')
@@ -45,11 +45,11 @@ def find_lines(buff, ln, *matches):
 endpython
 
 function! VimBookExecute()
-  python3 VimBookExecute()
+  python3 vim_book_execute()
 endfunction
 
 function! VimBookClear()
-  python3 VimBookClear()
+  python3 vim_book_clear()
 endfunction
 
 function! VimBookExecuteAll()
