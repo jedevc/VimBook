@@ -6,8 +6,13 @@ def vim_book_execute():
   line_number = vim_book_clear()
   line = vim.current.buffer[line_number]
 
-  if line.startswith('$ '):
-    code = line[2:]
+  start, end = find_lines(vim.current.buffer, line_number, '$ ')
+  if start is not None:
+    lines = []
+    for i in range(start, end + 1):
+      lines.append(vim.current.buffer[i][2:])
+    code = '\n'.join(lines)
+
     process = subprocess.run(code, shell=True, capture_output=True)
 
     result = process.stdout.decode('utf-8')
@@ -22,9 +27,13 @@ def vim_book_clear():
   start, end = find_lines(buff, line_number, '| ', '$ ')
 
   if start is not None:
-    del buff[start + 1:end + 2]
+    delstart = start
 
-  return start
+    while delstart < len(buff) and buff[delstart].startswith('$ '):
+      delstart += 1
+    del buff[delstart:end + 1]
+
+    return delstart - 1
 
 def find_lines(buff, ln, *matches):
   start, end = ln, ln
