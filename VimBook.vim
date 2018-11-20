@@ -2,19 +2,17 @@ python3 << endpython
 
 import vim, subprocess
 
+LANGUAGES = {
+  'bash': '$ ',
+  'python': '>>> '
+}
+
 def vim_book_execute():
-  line_number = vim_book_clear()
+  line_number = vim_book_clear(LANGUAGES.values())
   line = vim.current.buffer[line_number]
 
-  program = None
-
-  languages = {
-    'bash': '$ ',
-    'python': '>>> '
-  }
-
-  for lang in languages:
-    prefix = languages[lang]
+  for lang in LANGUAGES:
+    prefix = LANGUAGES[lang]
     start, end = find_lines(vim.current.buffer, line_number, prefix)
     if start is not None:
       lines = []
@@ -31,15 +29,15 @@ def vim_book_execute():
 
       break
 
-def vim_book_clear():
+def vim_book_clear(prefixes):
   buff = vim.current.buffer
   line_number = vim.current.range.start
-  start, end = find_lines(buff, line_number, '| ', '$ ', '>>> ')
+  start, end = find_lines(buff, line_number, '| ', *prefixes)
 
   if start is not None:
     delstart = start
 
-    while delstart < len(buff) and buff[delstart].startswith(('$ ', '>>> ')):
+    while delstart < len(buff) and buff[delstart].startswith(tuple(prefixes)):
       delstart += 1
     del buff[delstart:end + 1]
 
@@ -48,12 +46,14 @@ def vim_book_clear():
 def find_lines(buff, ln, *matches):
   start, end = ln, ln
 
+  # calculate start of code block
   while start >= 0 and buff[start].startswith(matches):
     start -= 1
+  start += 1
+
+  # calculate end of code block
   while end < len(vim.current.buffer) and buff[end].startswith(matches):
     end += 1
-
-  start += 1
   end -= 1
 
   if start <= end:
@@ -74,11 +74,12 @@ function! VimBookExecute()
 endfunction
 
 function! VimBookClear()
-  python3 vim_book_clear()
+  python3 vim_book_clear(LANGUAGES.values())
 endfunction
 
 function! VimBookExecuteAll()
-  silent global/^$ /call VimBookExecute()
+  " FIXME: this is quite inefficient
+  silent global/^\(\$\|>>>\) /call VimBookExecute()
 endfunction
 
 function! VimBookClearAll()
