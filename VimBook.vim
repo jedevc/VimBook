@@ -8,13 +8,16 @@ LANGUAGES = {
 }
 
 def vim_book_execute():
+  # clear existing output
   line_number = vim_book_clear(LANGUAGES.values())
+
   line = vim.current.buffer[line_number]
 
   for lang in LANGUAGES:
     prefix = LANGUAGES[lang]
     start, end = find_lines(vim.current.buffer, line_number, prefix)
     if start is not None:
+      # parse input
       lines = []
       for i in range(start, end + 1):
         lines.append(vim.current.buffer[i][len(prefix):])
@@ -22,9 +25,9 @@ def vim_book_execute():
 
       result = run_code(code, lang)
 
+      # format output
       lines = result.strip().split('\n')
       lines = ['| ' + line for line in lines]
-
       vim.current.buffer.append(lines, line_number + 1)
 
       break
@@ -37,6 +40,7 @@ def vim_book_clear(prefixes):
   if start is not None:
     delstart = start
 
+    # delete old output
     while delstart < len(buff) and buff[delstart].startswith(tuple(prefixes)):
       delstart += 1
     del buff[delstart:end + 1]
