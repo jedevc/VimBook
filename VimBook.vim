@@ -8,6 +8,8 @@ LANGUAGES = {
 }
 
 def vim_book_execute():
+  cursor = vim.current.window.cursor
+
   # clear existing output
   line_number = vim_book_clear(LANGUAGES.values())
 
@@ -31,6 +33,8 @@ def vim_book_execute():
       vim.current.buffer.append(lines, line_number + 1)
 
       break
+
+  vim.current.window.cursor = cursor
 
 def vim_book_clear(prefixes):
   buff = vim.current.buffer
